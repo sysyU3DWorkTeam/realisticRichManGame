@@ -1,0 +1,93 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GameController : MonoBehaviour {
+    CardFactory cardFactory;
+    GameMap gameMap;
+    InterActive act;
+    Uicontroller ui;
+
+    bool isBusy = false;
+
+    public PlayerBehaviour[] players = new PlayerBehaviour[1];
+    int index = 0;
+    PlayerBehaviour currentPlayer;
+
+    // Use this for initialization
+    void Start () {
+        cardFactory = this.GetComponent<CardFactory>();
+        gameMap = this.GetComponent<GameMap>();
+        act = this.GetComponent<InterActive>();
+
+        foreach (var player in players) {
+            player.gameController = this;
+        }
+
+        StartGame();
+	}
+	
+    void StartGame()
+    {
+        //为每位玩家发牌
+        foreach (PlayerBehaviour player in players)
+        {
+            player.position = 0;
+            player.transform.position = gameMap.getStationPostion(0);
+            for (int i = 0; i < 6; i++)
+            {
+                player.AddCard(cardFactory.Get());
+            }
+        }
+        //当前玩家为第一位玩家
+        currentPlayer = players[index];
+        NextRound();
+    }
+
+    void NextRound()
+    {
+        //显示玩家携带的所有卡牌
+        act.ShowCard(currentPlayer.GetAllCard());
+        //轮换机制, 换到下一位玩家
+        index = (index + 1) % players.Length;
+        currentPlayer = players[index];
+    }
+
+    public CardData UseThisCard(CardData cardData)
+    {
+        if (isBusy) return cardData;
+        isBusy = true;
+
+        //人物的地图位置需要改变
+        var step = cardData.step;
+        var startPosition = currentPlayer.position;
+        currentPlayer.position += step;
+
+        //人物的物理位置需要改变
+        for (int i = startPosition + 1; i <= currentPlayer.position; i++)
+        {
+            currentPlayer.ObatinTargetPositon(gameMap.getStationPostion(i));
+        }
+        CardData nCardData = cardFactory.Replace(cardData);
+        currentPlayer.UseCard(cardData, nCardData);
+
+
+        //Debug.Log(currentPlayer.GetAllCard().Count);
+
+        //给人物加新牌
+
+        //下一回合
+        return nCardData;
+    }
+
+    public void OnActionOver()
+    {
+        isBusy = false;
+        NextRound();
+    }
+
+    // Update is called once per frame
+    void Update () {
+		
+	}
+}
