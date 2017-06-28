@@ -1,0 +1,15 @@
+{
+"statoinsNum":"9"
+"dataList":
+[
+{"stationNo":"1","name":"washing room","majorStation":"false"},
+{"stationNo":"2","name":"washing room","majorStation":"false"},
+{"stationNo":"3","name":"prison house","majorStation":"false"},
+{"stationNo":"4","name":"prison house","majorStation":"false"},
+{"stationNo":"5","name":"visiting room","majorStation":"false"},
+{"stationNo":"6","name":"visiting room","majorStation":"false"},
+{"stationNo":"7","name":"clinic","majorStation":"true"},
+{"stationNo":"8","name":"police house","majorStation":"true"},
+{"stationNo":"9","name":"canteen","majorStation":"true"}
+]
+}
