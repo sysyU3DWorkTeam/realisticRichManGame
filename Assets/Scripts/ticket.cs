@@ -1,14 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 public class ticket : MonoBehaviour {
 	private List<List<string>> ticketsList = new List<List<string>> ();     //股票列表
-
+	public int num = 11;  //获取股票的个数，默认10个
 	//API的url前缀
 	public string baseUrl = "http://hq.sinajs.cn/list=sh";
 	// Use this for initialization
 	void Start() {
-		query ("http://hq.sinajs.cn/list=sh601006");
+		//StartCoroutine(getInfo("http://hq.sinajs.cn/list=sh601006"));
 	}
 	//筛选有效信息
 	IEnumerator getInfo (string url) {
@@ -16,19 +17,25 @@ public class ticket : MonoBehaviour {
 		WWW info = new WWW (url);
 		yield return info;
 		string[] str = info.text.Split (',');
-		infoList.Add (str[0]);  //股票名字
-		infoList.Add(str[3]);   //当前价格
-		ticketsList.Add(infoList);
+		if (str.Length != 1) {
+			string[] s = str[0].Split('"');
+			infoList.Add (s[1]);  //股票名字
+			infoList.Add (str [3]);   //当前价格
+			ticketsList.Add (infoList);
+		} else
+			num++;
 	}
-	public void query(string _url) {
-		StartCoroutine(getInfo(_url));
+	/*
+	    public void query() {
+		StartCoroutine(getTicketsList());
 	}
-	void getTicketsList() {
-		
-	    for (int i = 0; i < 10; i++) {
-		    string queryStr = "60100" + i.ToString ();
+	*/
+	public void getTicketsList() {
+		num = 19;
+	    for (int i = 601000; i < 601000+num; i++) {
+		    string queryStr = i.ToString ();
 			string url = baseUrl + queryStr;
-			query (url);
+			StartCoroutine(getInfo(url));
 	    }
 
     }
