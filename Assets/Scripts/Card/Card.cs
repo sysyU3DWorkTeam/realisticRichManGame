@@ -95,7 +95,7 @@ public class Card : MonoBehaviour{
     /// 洗牌操作
     /// </summary>
     /// <param name="nCardData"></param>
-    public void shuffle(CardData nCardData)
+    public void Shuffle(CardData nCardData)
     {
         UseCard();
         CurCardData = nCardData;

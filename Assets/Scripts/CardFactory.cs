@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// 卡牌列表类，储存没有被使用的卡牌
-/// </summary>
 [System.Serializable]
 public class CardDataList
 {
@@ -14,7 +11,8 @@ public class CardDataList
     public List<CardData> cardList;
 }
 
-public class CardFactory : MonoBehaviour {
+public class CardFactory : MonoBehaviour
+{
 
     /// <summary>
     /// 卡牌列表，储存没有被使用的卡牌
@@ -31,22 +29,23 @@ public class CardFactory : MonoBehaviour {
     /// <summary>
     /// 初始化卡牌列表
     /// </summary>
-    void Awake () {
+    void Awake()
+    {
         Debug.Log("OnEnable");
-        completeCardList = LoadJson.LoadCardListJsonFromFile("/cardListData.json");
+        completeCardList = LoadJson.LoadJsonFromFile<CardDataList>("/cardListData.json");
         for (int i = 0; i < completeCardList.cardCount; i++)
         {
             freeCardList.Add(completeCardList.cardList[i]);
         }
         Debug.Log(freeCardList.Count + "awake");
     }
-	/// <summary>
+    /// <summary>
     /// 获取新的卡牌
     /// </summary>
     /// <returns></returns>
     public CardData Get()
     {
-        int index = (int)Random.Range(0, freeCardList.Count);
+        int index = Random.Range(0, freeCardList.Count - 1);
         CardData result = freeCardList[index];
         freeCardList.RemoveAt(index);
         Debug.Log(freeCardList.Count);
@@ -70,8 +69,9 @@ public class CardFactory : MonoBehaviour {
         freeCardList.Add(cardData);
     }
 
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 }

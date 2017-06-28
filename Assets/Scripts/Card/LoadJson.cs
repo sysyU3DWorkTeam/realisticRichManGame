@@ -4,30 +4,31 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
-public class LoadJson : MonoBehaviour {
+public class LoadJson : MonoBehaviour
+{
 
-    public static CardDataList LoadCardListJsonFromFile(string path)
+    public static T LoadJsonFromFile<T>(string path)
     {
         if (!File.Exists(Application.dataPath + path))
         {
-            return null;
+            return default(T);
         }
 
         StreamReader sr = new StreamReader(Application.dataPath + path);
-        
-    
+
+
         if (sr == null)
         {
-            return null;
+            return default(T);
         }
         string json = sr.ReadToEnd();
 
         if (json.Length > 0)
         {
-            return JsonUtility.FromJson<CardDataList>(json);
+            return JsonUtility.FromJson<T>(json);
         }
 
-        return null;
+        return default(T);
     }
-    
+
 }
