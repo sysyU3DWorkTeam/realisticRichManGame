@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class InterActive : MonoBehaviour {
+
+    public Sound_Play SP;
+
     //用来显示卡片的
     public GameObject[] cardsInterface = new GameObject[6];
     private Card[] cards = new Card[6];
@@ -50,8 +53,10 @@ public class InterActive : MonoBehaviour {
                 {
                     if (hit.transform.tag == "CardTag")
                     {
+                        if (SP != null) SP.SoundPlay(0);
+                        
                         Debug.Log(hit.transform.name);
-                        hit.collider.GetComponent<Card>().CardData = gameController.UseThisCard(hit.transform.GetComponent<Card>().CardData);
+                        hit.collider.GetComponent<Card>().CurCardData = gameController.UseThisCard(hit.transform.GetComponent<Card>().UseCard());
                     }
                 }
             }
@@ -63,7 +68,7 @@ public class InterActive : MonoBehaviour {
     {
         for (int i = 0; i < allCards.Count && i < cardsInterface.Length; i++)
         {
-            cards[i].CardData = allCards[i];
+            cards[i].shuffle(allCards[i]);
         }
     }
     

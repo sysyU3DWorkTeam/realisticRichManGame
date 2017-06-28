@@ -8,18 +8,25 @@ enum playerStates {
 }  
 
 public class PlayerBehaviour : MonoBehaviour {
+
+    public delegate void OnActionOver(PlayerBehaviour sender);
+    public event OnActionOver MoveOver;
+    public event OnActionOver SkillOver;
+
     public GameObject player;  // 玩家模型
 
-	public GameController gameController;
+	//public GameController gameController;
 
-	public int skipsTimes;
-    public int position;
+	public Sound_Play SP1; //移动音效
+
+	public int skipsTimes = 0;
+    public int mapPosition = 0;
 
     private List<Vector3> myPositionList = new List<Vector3>(); //存放控制器给的位置参数 
     private List<CardData> myCardList = new List<CardData>(); //绑定卡牌类， 每个人绑定6个卡牌，用一个卡牌list来保存
 
-	public int score;
-	public int money;
+	public int score = 0;
+	public int money = 0;
 
 	public Texture end_btn;
 	private playerStates states;
@@ -34,9 +41,9 @@ public class PlayerBehaviour : MonoBehaviour {
     // Use this for initialization
     void Start () {
         player = this.gameObject;
-		skipsTimes = 0;
-		score = 0;
-		money = 0;
+		//skipsTimes = 0;
+		//score = 0;
+		//money = 0;
 		states = playerStates.move;
         loadsrc();
 		ScreenSetting ();
@@ -57,16 +64,20 @@ public class PlayerBehaviour : MonoBehaviour {
     {
         if (myPositionList.Count > 0)  //给参数才会走，防止出现溢出
         {
+			
             float step = speed * Time.deltaTime;  // 速度
             player.transform.position = Vector3.MoveTowards(player.transform.position, myPositionList[0], step);  // 移动
             if (player.transform.position == myPositionList[0])
             {
                 myPositionList.RemoveAt(0);
+				SP1.SoundPlay(10);
+				//SP1.SoundPlay(2);
 			}  
 			if (myPositionList.Count == 0)
 			{
-				if (gameController != null)
-					gameController.OnMoveOver();
+                MoveOver(this);
+				//if (gameController != null)
+				//	gameController.OnMoveOver();
 				states = playerStates.skill;
 			}
         }
@@ -107,11 +118,11 @@ public class PlayerBehaviour : MonoBehaviour {
     //使用卡牌，同时从自己的list里面删除卡牌
     public void UseCardSkill(CardData card, CardData nCard)
     {
-        gameController.OnSkillOver();
-
         myCardList[myCardList.IndexOf(card)] = nCard;
         this.states = playerStates.move;
 
+        SkillOver(this);
+        //gameController.OnSkillOver();
         return;
     }
 
@@ -145,7 +156,8 @@ public class PlayerBehaviour : MonoBehaviour {
 				end_btn,
 				guiRectStyle))
 			{
-				gameController.OnSkillOver ();
+				SP1.SoundPlay(3);
+				SkillOver(this);
 				states = playerStates.move;
 			}
 		}

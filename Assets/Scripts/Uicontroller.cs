@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Uicontroller : MonoBehaviour {
 
-	public GUIText Money_Label;
-	public GUIText Score_Label;
+	public GUIText[] Money_Label;
+	public GUIText[] Score_Label;
 
-	public int score = 0;
-	public int money = 0;
+	public int[] score;
+	public int[] money;
 
 	// Use this for initialization
 	void Start () {
@@ -17,23 +17,58 @@ public class Uicontroller : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Money_Label.text = string.Format ("{0:N0}", money); 
-		Score_Label.text = string.Format ("{0:N0}", score);
+		Display(0);
+		Display(1);
 	}
 
-	public void SetPoint(int s) {
-		score = s;
+	//显示玩家的金钱、分数
+	void Display(int index) { 
+		Money_Label[index].text = string.Format ("{0:N0}", money[index]); 
+		Score_Label[index].text = string.Format ("{0:N0}", score[index]);
 	}
 
-	public int GetPoint() {
-		return score;
-	}
+    public void ShowPlayerMessage(PlayerBehaviour[] players)
+    {
+        for (int i = 0; i < score.Length && i < players.Length; i++)
+        {
+            score[i] = players[i].score;
+        }
+        for (int i = 0; i < money.Length && i < players.Length; i++)
+        {
+            money[i] = players[i].money;
+        }
+    }
 
-	public void SetMoney(int m) {
-		money = m;
-	}
 
-	public int GetMoney() {
-		return money;
-	}
+ //   public void SetPoint(int s) {
+	//	score[0] = s;
+	//}
+
+	//public int GetPoint() {
+	//	return score[0];
+	//}
+
+	//public void SetMoney(int m) {
+	//	money[0] = m;
+	//}
+
+	//public int GetMoney() {
+	//	return money[0];
+	//}
+
+	//public void SetPoint1(int s) {
+	//	score[1] = s;
+	//}
+
+	//public int GetPoint1() {
+	//	return score[1];
+	//}
+
+	//public void SetMoney1(int m) {
+	//	money[1] = m;
+	//}
+
+	//public int GetMoney1() {
+	//	return money[1];
+	//}
 }

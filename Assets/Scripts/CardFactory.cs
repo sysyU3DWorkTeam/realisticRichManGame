@@ -2,41 +2,54 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 卡牌列表类，储存没有被使用的卡牌
+/// </summary>
+[System.Serializable]
+public class CardDataList
+{
+    //public string cardListName;
+    //public string version;
+    public int cardCount;
+    public List<CardData> cardList;
+}
+
 public class CardFactory : MonoBehaviour {
+
     /// <summary>
     /// 卡牌列表，储存没有被使用的卡牌
     /// </summary>
-    private List<CardData> cardList = new List<CardData>();
+    private List<CardData> freeCardList = new List<CardData>();
+
+
+
     /// <summary>
     /// 完整的卡牌列表，提供卡牌丢失时候的应急操作
     /// </summary>
-    private List<CardData> completeCardList = new List<CardData>();
+    private CardDataList completeCardList;
+
     /// <summary>
     /// 初始化卡牌列表
     /// </summary>
     void Awake () {
         Debug.Log("OnEnable");
-        for (int i = 1; i <= 6; i++)
+        completeCardList = LoadJson.LoadCardListJsonFromFile("/cardListData.json");
+        for (int i = 0; i < completeCardList.cardCount; i++)
         {
-            cardList.Add(new CardData(i));
-            cardList.Add(new CardData(i));
-            cardList.Add(new CardData(i));
-            cardList.Add(new CardData(i));
-            completeCardList.Add(new CardData(i));
-            completeCardList.Add(new CardData(i));
-            completeCardList.Add(new CardData(i));
-            completeCardList.Add(new CardData(i));
+            freeCardList.Add(completeCardList.cardList[i]);
         }
-	}
+        Debug.Log(freeCardList.Count + "awake");
+    }
 	/// <summary>
     /// 获取新的卡牌
     /// </summary>
     /// <returns></returns>
     public CardData Get()
     {
-        int index = (int)Random.Range(0, cardList.Count);
-        CardData result = cardList[index];
-        cardList.RemoveAt(index);
+        int index = (int)Random.Range(0, freeCardList.Count);
+        CardData result = freeCardList[index];
+        freeCardList.RemoveAt(index);
+        Debug.Log(freeCardList.Count);
         return result;
     }
     /// <summary>
@@ -45,7 +58,7 @@ public class CardFactory : MonoBehaviour {
     /// <param name="cardData"></param>
     public CardData Replace(CardData cardData)
     {
-        cardList.Add(cardData);
+        freeCardList.Add(cardData);
         return Get();
     }
     /// <summary>
@@ -54,7 +67,7 @@ public class CardFactory : MonoBehaviour {
     /// <param name="cardData"></param>
     public void Return(CardData cardData)
     {
-        cardList.Add(cardData);
+        freeCardList.Add(cardData);
     }
 
 	// Update is called once per frame
