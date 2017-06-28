@@ -52,7 +52,7 @@ public class GameController : MonoBehaviour
         foreach (PlayerBehaviour player in players)
         {
             //player.position = 0;
-            player.transform.position = gameMap.getStationPostion(player.mapPosition);
+            player.transform.position = gameMap.getStation(0).transform.position;
             for (int i = 0; i < 6; i++)
             {
                 player.AddCard(cardFactory.Get());
@@ -115,7 +115,7 @@ public class GameController : MonoBehaviour
             //人物的物理位置需要改变
             for (int i = startPosition + 1; i <= currentPlayer.mapPosition; i++)
             {
-                currentPlayer.ObatinTargetPositon(gameMap.getStationPostion(i));
+                currentPlayer.ObatinTargetPositon(gameMap.getStation(i).transform.position);
             }
 
             CardData nCardData = cardFactory.Replace(cardData);

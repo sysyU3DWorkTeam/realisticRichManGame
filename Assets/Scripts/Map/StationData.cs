@@ -6,10 +6,8 @@ using System;
 [Serializable]
 public class StationData
 {
-    public string name;
     public int stationNo;
-    public int type;
+    public string name;
     public bool majorStation;
-    public int eventNo;
 }
 
