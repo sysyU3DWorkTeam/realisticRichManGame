@@ -14,7 +14,6 @@ public class EventController : MonoBehaviour {
 
     private EventDataList mEventList;
     
-
     private void Awake()
     {
         mEventList = LoadJson.LoadJsonFromFile<EventDataList>("/EventDataList.json");
@@ -35,7 +34,7 @@ public class EventController : MonoBehaviour {
     /// </summary>
     /// <param name="station"></param>
     /// <returns></returns>
-    public DataReference getEvent(MapStation station)
+    public EventData getEvent(MapStation station)
     {
         List<EventData> stationEvents = new List<EventData>();
         for (int i = 0; i < mEventList.eventCount; i++)
@@ -48,11 +47,11 @@ public class EventController : MonoBehaviour {
         if (stationEvents.Count > 0)
         {
             int index = Random.Range(0, stationEvents.Count - 1);
-            return stationEvents[index].eventData;
+            return stationEvents[index];
         }
         else
         {
-            return new DataReference();
+            return null;
         }
     }
 }
