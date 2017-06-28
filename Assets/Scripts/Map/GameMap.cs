@@ -40,7 +40,7 @@ public class GameMap : MonoBehaviour {
 
         Debug.Log(mStationsList.stationsNum);
         mStationsList.dataList.Sort((a, b) => (a.stationNo.CompareTo(b.stationNo)));
-        for (int i = 0; i < mStationsList.stationsNum; i++)
+        for (int i = 0; i < mStationsList.stationsNum && i < stas.Count; i++)
         {
             Debug.Log(mapStations.Count);
             mapStations.Add(new MapStation(mStationsList.dataList[i], stas[i]));

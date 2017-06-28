@@ -90,6 +90,7 @@
     <Compile Include="Assets\Scripts\RandomEvent\EventData.cs" />
     <Compile Include="Assets\Scripts\Sound_Play.cs" />
     <Compile Include="Assets\Scripts\StartScene.cs" />
+    <Compile Include="Assets\Scripts\TicketData.cs" />
     <Compile Include="Assets\Scripts\TicketFactory.cs" />
     <Compile Include="Assets\Scripts\Uicontroller.cs" />
     <Compile Include="Assets\Scripts\ticket.cs" />
