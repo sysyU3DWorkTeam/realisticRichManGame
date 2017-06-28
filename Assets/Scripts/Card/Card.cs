@@ -29,11 +29,8 @@ public class Card : MonoBehaviour{
         }
         set
         {
-            Debug.Log(state == State.NORMAL);
-            Debug.Log(value != null);
             if (state == State.NORMAL && value != null)
             {
-                Debug.Log("usedddddddddddd2");
                 mCurCardData = value;
                 OnCardDataChange();
             }

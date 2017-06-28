@@ -4,67 +4,67 @@
 [
 {
 "eventNo":"1", "eventName":"washing room 1", "position":"washing room",
-"eventData":{"money":"-10","roundSkip":"0","point":"0"}, 
+"eventData":{"money":"-10","roundSkip":"0","point":"0"}
 },
 {
 "eventNo":"2", "eventName":"washing room 2", "position":"washing room",
-"eventData":{"money":"20","roundSkip":"0","point":"0"}, 
+"eventData":{"money":"20","roundSkip":"0","point":"0"} 
 },
 {
 "eventNo":"3", "eventName":"washing room 3", "position":"washing room",
-"eventData":{"money":"-30","roundSkip":"0","point":"0"}, 
+"eventData":{"money":"-30","roundSkip":"0","point":"0"}
 },
 {
 "eventNo":"4", "eventName":"washing room 4", "position":"washing room",
-"eventData":{"money":"0","roundSkip":"0","point":"1"}, 
+"eventData":{"money":"0","roundSkip":"0","point":"1"}
 },
 {
 "eventNo":"5", "eventName":"prison house 1", "position":"prison house",
-"eventData":{"money":"+10","roundSkip":"0","point":"0"}, 
+"eventData":{"money":"+10","roundSkip":"0","point":"0"} 
 },
 {
 "eventNo":"6", "eventName":"prison house 2", "position":"prison house",
-"eventData":{"money":"0","roundSkip":"0","point":"1"}, 
+"eventData":{"money":"0","roundSkip":"0","point":"1"} 
 },
 {
 "eventNo":"7", "eventName":"prison house 3", "position":"prison house",
-"eventData":{"money":"+20","roundSkip":"0","point":"0"}, 
+"eventData":{"money":"+20","roundSkip":"0","point":"0"} 
 },
 {
 "eventNo":"8", "eventName":"prison house 4", "position":"prison house",
-"eventData":{"money":"-10","roundSkip":"0","point":"0"}, 
+"eventData":{"money":"-10","roundSkip":"0","point":"0"} 
 },
 {
 "eventNo":"9", "eventName":"visiting room 1", "position":"visiting room",
-"eventData":{"money":"+30","roundSkip":"0","point":"0"}, 
+"eventData":{"money":"+30","roundSkip":"0","point":"0"}
 },
 {
 "eventNo":"10", "eventName":"visiting room 2", "position":"visiting room",
-"eventData":{"money":"-10","roundSkip":"0","point":"0"}, 
+"eventData":{"money":"-10","roundSkip":"0","point":"0"}
 },
 {
 "eventNo":"11", "eventName":"visiting room 3", "position":"visiting room",
-"eventData":{"money":"+20","roundSkip":"0","point":"0"}, 
+"eventData":{"money":"+20","roundSkip":"0","point":"0"} 
 },
 {
 "eventNo":"12", "eventName":"visiting room 4", "position":"visiting room",
-"eventData":{"money":"+40","roundSkip":"0","point":"0"}, 
+"eventData":{"money":"+40","roundSkip":"0","point":"0"} 
 },
 {
 "eventNo":"13", "eventName":"visiting room 5", "position":"visiting room",
-"eventData":{"money":"-30","roundSkip":"0","point":"0"}, 
+"eventData":{"money":"-30","roundSkip":"0","point":"0"} 
 },
 {
 "eventNo":"14", "eventName":"clinic", "position":"clinic",
-"eventData":{"money":"-20","roundSkip":"0","point":"0"}, 
+"eventData":{"money":"-20","roundSkip":"0","point":"0"} 
 },
 {
 "eventNo":"15", "eventName":"police house", "position":"police house",
-"eventData":{"money":"0","roundSkip":"0","point":"-1"}, 
+"eventData":{"money":"0","roundSkip":"0","point":"-1"} 
 },
 {
 "eventNo":"16", "eventName":"canteen", "position":"canteen",
-"eventData":{"money":"0","roundSkip":"0","point":"+1"}, 
+"eventData":{"money":"0","roundSkip":"0","point":"+1"} 
 }
 ]
 }

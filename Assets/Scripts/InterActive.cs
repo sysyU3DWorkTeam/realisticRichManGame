@@ -68,7 +68,7 @@ public class InterActive : MonoBehaviour {
     {
         for (int i = 0; i < allCards.Count && i < cardsInterface.Length; i++)
         {
-            cards[i].shuffle(allCards[i]);
+            cards[i].Shuffle(allCards[i]);
         }
     }
     

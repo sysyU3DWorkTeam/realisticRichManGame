@@ -29,6 +29,7 @@ public class GameMap : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
+        mapStations = new List<MapStation>();
         GameObject map = GameObject.Find("map");
         List<Transform> stas = new List<Transform>(map.GetComponentsInChildren<Transform>());
         
@@ -37,9 +38,11 @@ public class GameMap : MonoBehaviour {
         //路径
         mStationsList = LoadJson.LoadJsonFromFile<StationsDataList>("/MapStationsData.json");
 
+        Debug.Log(mStationsList.stationsNum);
         mStationsList.dataList.Sort((a, b) => (a.stationNo.CompareTo(b.stationNo)));
-        for (int i = 0; i < mStationsList.stationsNum; i++)
+        for (int i = 0; i < mStationsList.stationsNum && i < stas.Count; i++)
         {
+            Debug.Log(mapStations.Count);
             mapStations.Add(new MapStation(mStationsList.dataList[i], stas[i]));
         }
 		//Debug.Log (stations.Count);
@@ -51,8 +54,9 @@ public class GameMap : MonoBehaviour {
     /// <param name="index"></param>
     /// <returns></returns>
 	public MapStation getStation(int index) {
-        Debug.Log("stat: " + mapStations.Count);
-        Debug.Log("index: " + index);
+        //Debug.Log("stat: " + mapStations.Count);
+        //Debug.Log("index: " + index);
+        
         index = index % mapStations.Count;
 		return mapStations[index];
 	}
