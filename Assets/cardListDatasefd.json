@@ -1,0 +1,23 @@
+{
+"cardTypeCount":"3",
+"cardList":[
+{
+"name":"cure","count":"4","step":"4","address":"clinic",
+"cost":{"money":"300","point":"0"},
+"gain":{"money":"0","point":"20"},
+"specialFunction":[]
+},
+{
+"name":"lucky","count":"4","step":"2","address":"prison house",
+"cost":{"money":"200","point":"0"},
+"gain":{"money":"0","point":"30"},
+"specialFunction":[]
+},
+{
+"name":"drug","count":"4","step":"2","address":"clinic",
+"cost":{"money":"200","point":"0"},
+"gain":{"money":"0","point":"10"},
+"specialFunction":[]
+}
+]
+}

@@ -19,8 +19,6 @@ public class CardFactory : MonoBehaviour
     /// </summary>
     private List<CardData> freeCardList = new List<CardData>();
 
-
-
     /// <summary>
     /// 完整的卡牌列表，提供卡牌丢失时候的应急操作
     /// </summary>
@@ -31,13 +29,13 @@ public class CardFactory : MonoBehaviour
     /// </summary>
     void Awake()
     {
-        Debug.Log("OnEnable");
+        //Debug.Log("OnEnable");
         completeCardList = LoadJson.LoadJsonFromFile<CardDataList>("/cardListData.json");
         for (int i = 0; i < completeCardList.cardCount; i++)
         {
             freeCardList.Add(completeCardList.cardList[i]);
         }
-        Debug.Log(freeCardList.Count + "awake");
+        //Debug.Log(freeCardList.Count + "awake");
     }
     /// <summary>
     /// 获取新的卡牌
@@ -48,7 +46,6 @@ public class CardFactory : MonoBehaviour
         int index = Random.Range(0, freeCardList.Count - 1);
         CardData result = freeCardList[index];
         freeCardList.RemoveAt(index);
-        Debug.Log(freeCardList.Count);
         return result;
     }
     /// <summary>

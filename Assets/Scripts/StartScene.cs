@@ -31,7 +31,7 @@ public class StartScene : MonoBehaviour {
 
 	public void GoNextScene(GameObject NScene)  
 	{  
-		Application.LoadLevel("UI");//切换到UI场景 
+		Application.LoadLevel("selectRole");//切换到UI场景 
 	}  
 
 	public void ExitScene(GameObject exitScene)  

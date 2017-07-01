@@ -32,18 +32,24 @@ public class GameMap : MonoBehaviour {
         mapStations = new List<MapStation>();
         GameObject map = GameObject.Find("map");
         List<Transform> stas = new List<Transform>(map.GetComponentsInChildren<Transform>());
-        
-        Debug.Log(stas.Count);
-        stas.Sort((a, b) => (a.name.CompareTo(b.name)));
+		stas.RemoveAt (0);
+        /*for (int i = 0; i < stas.Count; i++)
+        {
+            Debug.Log(stas[i].name);
+        }
+*/
+        //stas.Sort((a, b) => (a.name.CompareTo(b.name)));
         //路径
         mStationsList = LoadJson.LoadJsonFromFile<StationsDataList>("/MapStationsData.json");
 
-        Debug.Log(mStationsList.stationsNum);
+        //Debug.Log(mStationsList.stationsNum);
         mStationsList.dataList.Sort((a, b) => (a.stationNo.CompareTo(b.stationNo)));
-        for (int i = 0; i < mStationsList.stationsNum && i < stas.Count; i++)
+        //for (int i = 0; i < mStationsList.stationsNum && i < stas.Count; i++)
+		for (int i = 0;i < 58; i++)
         {
-            Debug.Log(mapStations.Count);
-            mapStations.Add(new MapStation(mStationsList.dataList[i], stas[i]));
+            //Debug.Log(mStationsList.dataList[i].name + " + " + stas[i].name);
+            //mapStations.Add(new MapStation(mStationsList.dataList[i], stas[i]));
+			mapStations.Add(new MapStation(mStationsList.dataList[0], stas[i]));
         }
 		//Debug.Log (stations.Count);
 	}

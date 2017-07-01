@@ -1,6 +1,11 @@
 {
-  "stationsNum": "9",
+  "stationsNum": "10",
   "dataList": [
+    {
+      "stationNo": "0",
+      "name": "road",
+      "majorStation": "true"
+    },
     {
       "stationNo": "1",
       "name": "washing room",

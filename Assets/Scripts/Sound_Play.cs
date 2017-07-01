@@ -11,7 +11,6 @@ public class Sound_Play : MonoBehaviour
 	{
 
 	}
-
 	public void SoundPlay(int SoundNumber)
 	{
 

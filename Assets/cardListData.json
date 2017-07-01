@@ -1,65 +1,163 @@
 {
-"cardCount":"12",
+"cardCount":"24",
 "cardList":[
 {
-"id":"1", "name":"devil","step":"6","cost":{"money":"50","roundSkip":"0","point":"0"},"address":"police house",
-"buffFunction":{"money":"0","roundSkip":"0","point":"0"}, 
-"deBuffFunction":{"money":"0","roundSkip":"0","point":"3"}
+"id":"1","name":"cure","step":"4","address":"clinic",
+"cost":{"money":"+300","point":"0"},
+"gain":{"money":"0","point":"+20"},
+"specialFunctions":[]
 },
 {
-"id":"2", "name":"business","step":"5","cost":{"money":"0","roundSkip":"1","point":"0"},"address":"visiting room",
-"buffFunction":{"money":"40","roundSkip":"0","point":"0"},
-"deBuffFunction":{"money":"0","roundSkip":"0","point":"0"}
+"id":"2","name":"lucky","step":"2","address":"prison house",
+"cost":{"money":"+200","point":"0"},
+"gain":{"money":"0","point":"+30"},
+"specialFunctions":[]
 },
 {
-"id":"3", "name":"exploit","step":"4","cost":{"money":"0","roundSkip":"0","point":"1"},"address":"washing room",
-"buffFunction":{"money":"0","roundSkip":"0","point":"0"},
-"deBuffFunction":{"money":"30","roundSkip":"0","point":"0"}
+"id":"3","name":"devil","step":"6","address":"police house",
+"cost":{"money":"+500","point":"0"},
+"gain":{"money":"0","point":"-30"},
+"specialFunctions":[]
 },
 {
-"id":"4", "name":"cure","step":"3","cost":{"money":"30","roundSkip":"0","point":"0"},"address":"clinic",
-"buffFunction":{"money":"0","roundSkip":"0","point":"2"},
-"deBuffFunction":{"money":"0","roundSkip":"0","point":"0"}
+"id":"4","name":"exploit","step":"4","address":"washing room",
+"cost":{"money":"0","point":"-10"},
+"gain":{"money":"-300","point":"0"},
+"specialFunctions":[]
 },
 {
-"id":"5", "name":"binding","step":"3","cost":{"money":"30","roundSkip":"0","point":"0"},"address":"washing room",
-"buffFunction":{"money":"0","roundSkip":"0","point":"0"},
-"deBuffFunction":{"money":"0","roundSkip":"1","point":"0"}
+"id":"5","name":"binding","step":"3","address":"washing room",
+"cost":{"money":"+300","point":"0"},
+"gain":{"money":"0","point":"0"},
+"specialFunctions":[{"functionMode":2,"self":false,"parameters":[1]}]
 },
 {
-"id":"6", "name":"lucky","step":"2","cost":{"money":"20","roundSkip":"0","point":"0"},"address":"prison house",
-"buffFunction":{"money":"0","roundSkip":"0","point":"3"},
-"deBuffFunction":{"money":"0","roundSkip":"0","point":"0"}
+"id":"6","name":"business","step":"5","address":"visiting room",
+"cost":{"money":"0","point":"0"},
+"gain":{"money":"+400","point":"0"},
+"specialFunctions":[{"functionMode":2,"self":true,"parameters":[1]}]
 },
 {
-"id":"7", "name":"devil","step":"6","cost":{"money":"50","roundSkip":"0","point":"0"},"address":"police house",
-"buffFunction":{"money":"0","roundSkip":"0","point":"0"}, 
-"deBuffFunction":{"money":"0","roundSkip":"0","point":"3"}
+"id":"7","name":"drug","step":"3","address":"clinic",
+"cost":{"money":"0","point":"0"},
+"gain":{"money":"0","point":"+20"},
+"specialFunctions":[
+{"functionMode":2,"self":true,"parameters":[1]}
+]
 },
 {
-"id":"8", "name":"business","step":"5","cost":{"money":"0","roundSkip":"1","point":"0"},"address":"visiting room",
-"buffFunction":{"money":"40","roundSkip":"0","point":"0"},
-"deBuffFunction":{"money":"0","roundSkip":"0","point":"0"}
+"id":"8","name":"trading","step":"5","address":"visiting room",
+"cost":{"money":"0","point":"+10"},
+"gain":{"money":"+200","point":"0"},
+"specialFunctions":[]
 },
 {
-"id":"9", "name":"exploit","step":"4","cost":{"money":"0","roundSkip":"0","point":"1"},"address":"washing room",
-"buffFunction":{"money":"0","roundSkip":"0","point":"0"},
-"deBuffFunction":{"money":"30","roundSkip":"0","point":"0"}
+"id":"9","name":"fighting","step":"1","address":"canteen",
+"cost":{"money":"+200","point":"0"},
+"gain":{"money":"0","point":"0"},
+"specialFunctions":[
+{"functionMode":1,"self":false,"parameters":[-50]}
+]
 },
 {
-"id":"10", "name":"cure","step":"3","cost":{"money":"30","roundSkip":"0","point":"0"},"address":"clinic",
-"buffFunction":{"money":"0","roundSkip":"0","point":"2"},
-"deBuffFunction":{"money":"0","roundSkip":"0","point":"0"}
+"id":"10","name":"report","step":"4","address":"police house",
+"cost":{"money":"0","point":"0"},
+"gain":{"money":"0","point":"0"},
+"specialFunctions":[
+{"functionMode":2,"self":true,"parameters":[1]},
+{"functionMode":1,"self":false,"parameters":[-30]}
+]
 },
 {
-"id":"11", "name":"binding","step":"3","cost":{"money":"30","roundSkip":"0","point":"0"},"address":"washing room",
-"buffFunction":{"money":"0","roundSkip":"0","point":"0"},
-"deBuffFunction":{"money":"0","roundSkip":"1","point":"0"}
+"id":"11","name":"cure","step":"4","address":"clinic",
+"cost":{"money":"+300","point":"0"},
+"gain":{"money":"0","point":"+20"},
+"specialFunctions":[]
 },
 {
-"id":"12", "name":"lucky","step":"2","cost":{"money":"20","roundSkip":"0","point":"0"},"address":"prison house",
-"buffFunction":{"money":"0","roundSkip":"0","point":"3"},
-"deBuffFunction":{"money":"0","roundSkip":"0","point":"0"}
+"id":"12","name":"lucky","step":"2","address":"prison house",
+"cost":{"money":"+200","point":"0"},
+"gain":{"money":"0","point":"+30"},
+"specialFunctions":[]
+},
+{
+"id":"13","name":"cure","step":"4","address":"clinic",
+"cost":{"money":"+300","point":"0"},
+"gain":{"money":"0","point":"+20"},
+"specialFunctions":[]
+},
+{
+"id":"14","name":"lucky","step":"2","address":"prison house",
+"cost":{"money":"+200","point":"0"},
+"gain":{"money":"0","point":"+30"},
+"specialFunctions":[]
+},
+{
+"id":"15","name":"devil","step":"6","address":"police house",
+"cost":{"money":"+500","point":"0"},
+"gain":{"money":"0","point":"-30"},
+"specialFunctions":[]
+},
+{
+"id":"16","name":"exploit","step":"4","address":"washing room",
+"cost":{"money":"0","point":"-10"},
+"gain":{"money":"-300","point":"0"},
+"specialFunctions":[]
+},
+{
+"id":"17","name":"binding","step":"3","address":"washing room",
+"cost":{"money":"+300","point":"0"},
+"gain":{"money":"0","point":"0"},
+"specialFunctions":[{"functionMode":2,"self":false,"parameters":[1]}]
+},
+{
+"id":"18","name":"business","step":"5","address":"visiting room",
+"cost":{"money":"0","point":"0"},
+"gain":{"money":"+400","point":"0"},
+"specialFunctions":[{"functionMode":2,"self":true,"parameters":[1]}]
+},
+{
+"id":"19","name":"drug","step":"3","address":"clinic",
+"cost":{"money":"0","point":"0"},
+"gain":{"money":"0","point":"+20"},
+"specialFunctions":[
+{"functionMode":2,"self":true,"parameters":[1]}
+]
+},
+{
+"id":"20","name":"trading","step":"5","address":"visiting room",
+"cost":{"money":"0","point":"+10"},
+"gain":{"money":"+200","point":"0"},
+"specialFunctions":[]
+},
+{
+"id":"21","name":"fighting","step":"1","address":"canteen",
+"cost":{"money":"+200","point":"0"},
+"gain":{"money":"0","point":"0"},
+"specialFunctions":[
+{"functionMode":1,"self":false,"parameters":[-50]}
+]
+},
+{
+"id":"22","name":"report","step":"4","address":"police house",
+"cost":{"money":"0","point":"0"},
+"gain":{"money":"0","point":"0"},
+"specialFunctions":[
+{"functionMode":2,"self":true,"parameters":[1]},
+{"functionMode":1,"self":false,"parameters":[-30]}
+]
+},
+{
+"id":"23","name":"cure","step":"4","address":"clinic",
+"cost":{"money":"+300","point":"0"},
+"gain":{"money":"0","point":"+20"},
+"specialFunctions":[]
+},
+{
+"id":"24","name":"lucky","step":"2","address":"prison house",
+"cost":{"money":"+200","point":"0"},
+"gain":{"money":"0","point":"+30"},
+"specialFunctions":[]
 }
 ]
 }

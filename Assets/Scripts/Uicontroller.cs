@@ -10,6 +10,9 @@ public class Uicontroller : MonoBehaviour {
 	public int[] score;
 	public int[] money;
 
+	public Texture[] roleImage;
+	public GUITexture[] Role_Icon;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -37,38 +40,17 @@ public class Uicontroller : MonoBehaviour {
         {
             money[i] = players[i].money;
         }
+
+		////////////
+		//Todo,显示角色形象，目前只有单人选角色
+		//for (int i = 0; i < players.Length;i++) {
+		for (int i = 0; i < 2;i++) {
+			int roleNum = PlayerPrefs.GetInt("roleNum"+i.ToString());
+			Role_Icon[i].texture = roleImage[roleNum];
+		}
+		//PlayerPrefs.DeleteAll();
+
+
     }
-
-
- //   public void SetPoint(int s) {
-	//	score[0] = s;
-	//}
-
-	//public int GetPoint() {
-	//	return score[0];
-	//}
-
-	//public void SetMoney(int m) {
-	//	money[0] = m;
-	//}
-
-	//public int GetMoney() {
-	//	return money[0];
-	//}
-
-	//public void SetPoint1(int s) {
-	//	score[1] = s;
-	//}
-
-	//public int GetPoint1() {
-	//	return score[1];
-	//}
-
-	//public void SetMoney1(int m) {
-	//	money[1] = m;
-	//}
-
-	//public int GetMoney1() {
-	//	return money[1];
-	//}
+		
 }

@@ -9,6 +9,7 @@ public class Card : MonoBehaviour{
     {
         NORMAL,
         SELECT,
+        INIT,
         USE
     }
 
@@ -29,7 +30,7 @@ public class Card : MonoBehaviour{
         }
         set
         {
-            if (state == State.NORMAL && value != null)
+            if (state == State.USE && value != null)
             {
                 mCurCardData = value;
                 OnCardDataChange();
@@ -58,13 +59,16 @@ public class Card : MonoBehaviour{
     /// <param name="cardData"></param>
     private void OnCardDataChange()
     {
-        animator.SetTrigger("Use");
-        state = State.USE;
-        boxCollider.enabled = false;
+        if(state == State.USE)
+        {
+            state = State.INIT;
+            boxCollider.enabled = false;
+        }
     }
 
     /// <summary>
     /// 使用卡片调用
+    /// 会触发翻牌动画
     /// </summary>
     /// <returns></returns>
     public CardData UseCard()
@@ -73,12 +77,20 @@ public class Card : MonoBehaviour{
         //isInited = false;
         //state = State.USE;
         //boxCollider.enabled = false;
-        return CurCardData;
+        
+        if (state == State.NORMAL)
+        {
+            state = State.USE;
+            //Debug.Log("翻了个牌");
+            animator.SetTrigger("Use");
+            return CurCardData;
+        }
+        return null;
     }
 
     private IEnumerator WaitNewData()
     {
-        while(state != State.USE)
+        while(state != State.INIT)
         {
             yield return new WaitForEndOfFrame();
         }
@@ -88,6 +100,7 @@ public class Card : MonoBehaviour{
         state = State.NORMAL;
         boxCollider.enabled = true;
     }
+
     /// <summary>
     /// 洗牌操作
     /// </summary>
@@ -102,11 +115,17 @@ public class Card : MonoBehaviour{
     {
         StartCoroutine("WaitNewData");
     }
+
     /// <summary>
     /// 选择卡片调用
     /// </summary>
     public void SelectCard()
     {
-        animator.SetTrigger("Select");
+        animator.SetBool("Select", true);
+    }
+
+    public void UnSelectCard()
+    {
+        animator.SetBool("Select", false);
     }
 }

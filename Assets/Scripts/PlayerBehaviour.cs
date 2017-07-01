@@ -14,11 +14,11 @@ public class PlayerBehaviour : MonoBehaviour {
     public event OnActionOver SkillOver;
 
     public GameObject player;  // 玩家模型
-
+	public Texture role;
 	//public GameController gameController;
 
 	public Sound_Play SP1; //移动音效
-
+	public string roleName;
 	public int skipsTimes = 0;
     public int mapPosition = 0;
 
@@ -45,12 +45,13 @@ public class PlayerBehaviour : MonoBehaviour {
 		//score = 0;
 		//money = 0;
 		states = playerStates.move;
+		SP1 = GameObject.Find ("SceneDirector").GetComponent<Sound_Play>();
         loadsrc();
 		ScreenSetting ();
     }
 	
 	// 每一帧获取新的参数，移动player
-	void FixedUpdate () {
+	void Update () {
         PlayerMove();
     }
 
@@ -120,12 +121,39 @@ public class PlayerBehaviour : MonoBehaviour {
     {
         myCardList[myCardList.IndexOf(card)] = nCard;
         this.states = playerStates.move;
-
+        /*
+		Debug.Log (card.deBuffFunction.money);
+		Debug.Log (card.deBuffFunction.point);
+		Debug.Log (card.deBuffFunction.roundSkip);
+		if (card.deBuffFunction.money > 0 || card.deBuffFunction.point > 0 || card.deBuffFunction.roundSkip > 0) {
+			Debug.Log ("soundplay 5");
+			SP1.SoundPlay (5);
+		} else {
+			SP1.SoundPlay (4);
+			Debug.Log ("soundplay 4");
+		}
+        
+        */
         SkillOver(this);
         //gameController.OnSkillOver();
         return;
     }
+    public void ReplaceCard(CardData card, CardData nCard)
+    {
+        for (int i = 0; i < myCardList.Count; i++)
+        {
+            if (myCardList[i].id.Equals(card.id))
+            {
+                myCardList[i] = nCard;
+                break;
+            }
+        }
+        return;
+    }
+    public void findcard(CardData Card)
+    {
 
+    }
     //获得所有带着的卡牌
     public List<CardData> GetAllCard()
     {
@@ -143,23 +171,28 @@ public class PlayerBehaviour : MonoBehaviour {
 	    
 	}
 
-	void OnGUI() {
-		if (states == playerStates.skill) {
-			GUI.Label (new Rect (screenX - end_btn.width * 0.5f + end_btn.width*0.3f,
-				end_btn.height * 0.1f+10, 
-				300, end_btn.height*0.3f),
-				"是否发动技能?",guiLabelStyle);
-			;
-			if (GUI.Button (new Rect (screenX - end_btn.width * 0.5f,
-				end_btn.height * 0.1f, 
-				end_btn.width*0.2f, end_btn.height*0.2f	),
-				end_btn,
-				guiRectStyle))
-			{
-				SP1.SoundPlay(3);
-				SkillOver(this);
-				states = playerStates.move;
-			}
-		}
+	//void OnGUI() {
+	//	if (states == playerStates.skill) {
+	//		GUI.Label (new Rect (screenX - end_btn.width * 0.5f + end_btn.width*0.3f,
+	//			end_btn.height * 0.1f+10, 
+	//			300, end_btn.height*0.3f),
+	//			"是否发动技能?",guiLabelStyle);
+	//		;
+	//		if (GUI.Button (new Rect (screenX - end_btn.width * 0.5f,
+	//			end_btn.height * 0.1f, 
+	//			end_btn.width*0.2f, end_btn.height*0.2f	),
+	//			end_btn,
+	//			guiRectStyle))
+	//		{
+	//			SP1.SoundPlay(3);
+	//			SkillOver(this);
+	//			states = playerStates.move;
+	//		}
+	//	}
+	//}
+
+	public void setRole(Texture role) {
+
+		this.GetComponent<Renderer> ().material.mainTexture = role;
 	}
 }
