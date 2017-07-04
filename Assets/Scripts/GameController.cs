@@ -15,6 +15,11 @@ public class GameController : MonoBehaviour
     //用来实现简易状态机
     States state = States.move;
 
+    //炒股
+    public GameObject ticketUIObj;
+    public GameObject ticketCamera;
+    TicketUI ticketUI;
+
     CardFactory cardFactory;
     GameMap gameMap;
     InterActive act;
@@ -28,24 +33,27 @@ public class GameController : MonoBehaviour
     bool isSkillEnd = false;
     bool isMapEffectEnd = false;
     bool isFunctionEnd = false;
+    //炒股结束
+    bool isStockEnd = false;
 
     private bool isWaitIA;
     //public Sound_Play SP2;
 
     public PlayerBehaviour[] players = new PlayerBehaviour[1];
-	//角色头像列表.......................................................................................新增(采用后可删)
-	public Texture[] roleImage = new Texture[4];
-	//角色头像列表.......................................................................................新增(采用后可删)
+    //角色头像列表.......................................................................................新增(采用后可删)
+    public Texture[] roleImage = new Texture[4];
+    //角色头像列表.......................................................................................新增(采用后可删)
 
     private delegate void SelectCardCallBack();
 
     private List<CardData> mSelectedCard = new List<CardData>();
     private int selectCardNum;
-    private List<PlayerBehaviour> mBeSelectedPlayer = null;
+    private List<PlayerBehaviour> mBeSelectedPlayer = new List<PlayerBehaviour>();
     private int selectPlayerNum;
     private bool replaceWithSelectCard;
 
-    private class SelectImformation{
+    private class SelectImformation
+    {
         public bool selectPlayer;
         public bool selectCard;
         public int playerNum;
@@ -75,31 +83,36 @@ public class GameController : MonoBehaviour
         functionManager.AddFunction(SourceFunction);
         functionManager.AddFunction(RoundFunction);
         functionManager.AddFunction(PositionFunction);
-        
+        functionManager.AddFunction(StealFunction);
+        functionManager.AddFunction(ReplaceFunction);
+
         cardFactory = this.GetComponent<CardFactory>();
         gameMap = this.GetComponent<GameMap>();
         act = this.GetComponent<InterActive>();
         ui = this.GetComponent<Uicontroller>();
         eventController = this.GetComponent<EventController>();
-        if (this.GetComponentInChildren<EventBoard>())
-        {
-            Debug.Log("绑定EventBoard成功");
-            eventBoard = this.GetComponentInChildren<EventBoard>();
-            eventBoard.leftbuttonEvent += OnMapEffect;
-        }
+
+        eventBoard = this.GetComponentInChildren<EventBoard>();
+        eventBoard.leftbuttonEvent += OnMapEffect;
+
+        ticketUI = ticketUIObj.GetComponent<TicketUI>();
+        ticketUI.StockOver += OnStockOver;
+        ticketCamera.SetActive(false);
+        //ticketUIObj.SetActive(false);
 
         //注册监听事件
-		//设置玩家头像
-		int count = 0;
+        //设置玩家头像
+        int count = 0;
         foreach (var player in players)
         {
-			//.................................设置玩家角色......................................新增（采用后删掉）
-			int roleNum = PlayerPrefs.GetInt("roleNum"+count.ToString());
-			player.setRole(roleImage[roleNum]);
-
-			count++;
-			//.....................................................................................................
-			//player.gameController = this;
+            //.................................设置玩家角色......................................新增（采用后删掉）
+            int roleNum = PlayerPrefs.GetInt("roleNum" + count.ToString());
+            player.setRole(roleImage[roleNum]);
+			player.roleName = count;
+			player.PD = player.LoadDataFromJson ("/PlayerData"+count.ToString()+".json");
+            count++;
+            //.....................................................................................................
+            //player.gameController = this;
             player.MoveOver += OnMoveOver;
             player.SkillOver += OnSkillOver;
         }
@@ -127,10 +140,16 @@ public class GameController : MonoBehaviour
         //轮换机制, 换到下一位玩家
         index = (index + 1);
         currentPlayer = players[index % players.Length];
-        otherPlayer = players[(index+1) % players.Length];
+        otherPlayer = players[(index + 1) % players.Length];
         Debug.Log("回合: " + index.ToString());
     }
-
+    void ResetSelectImformation()
+    {
+        selectCardNum = 0;
+        selectPlayerNum = 0;
+        mBeSelectedPlayer.Clear();
+        mSelectedCard.Clear();
+    }
     void NextRound()
     {
         //换玩家
@@ -148,6 +167,8 @@ public class GameController : MonoBehaviour
         act.ShowCard(currentPlayer.GetAllCard());
         //更新玩家金钱等讯息
         SendPlayerMessageToUI();
+        //清空已选择的卡牌, 已选择的人物, 等
+        ResetSelectImformation();
         return;
     }
 
@@ -177,19 +198,18 @@ public class GameController : MonoBehaviour
                     return;
                 }
                 //判断钱够不够用卡牌
-                else if (currentPlayer.money < cardData.cost.money)
+                else if (currentPlayer.PD.money < cardData.cost.money)
                 {
                     Debug.Log("金钱不足, 不能使用这张牌");
                     return;
                 }
                 //判断分数够不够用卡牌
-                else if (currentPlayer.score < cardData.cost.point)
+                else if (currentPlayer.PD.score < cardData.cost.point)
                 {
                     Debug.Log("分数不足, 不能使用这张牌");
                     return;
                 }
             }
-
 
             //使用技能
             StartCoroutine(ExeFunction(card));
@@ -254,23 +274,27 @@ public class GameController : MonoBehaviour
         //GameController和IA的繁忙状态必须同步
         act.SetBusy(isBusy);
 
+        CardData cardData = null;
+        CardData nCardData = null;
         ////////////////////////////卡牌阶段//////////////////////////////
         if (card != null)
         {
+            cardData = card.CurCardData;
             card.UseCard();
-            CardData cardData = card.CurCardData;
             Debug.Log("选择卡牌 " + cardData.name + " 使用技能");
 
+            /////////////////////应用数据效果/////////////////////
             //应用数据效果
-            currentPlayer.money += (-cardData.cost.money + cardData.gain.money);
-            currentPlayer.score += (-cardData.cost.point + cardData.gain.point);
+            currentPlayer.PD.money += (-cardData.cost.money + cardData.gain.money);
+            currentPlayer.PD.score += (-cardData.cost.point + cardData.gain.point);
             Debug.Log("玩家" + currentPlayer.name + "付出代价: 金钱:" + cardData.cost.money + " 分数:" + cardData.cost.point);
             Debug.Log("玩家" + currentPlayer.name + "得到增益: 金钱:" + cardData.gain.money + " 分数:" + cardData.gain.point);
-            Debug.Log("玩家" + currentPlayer.name + "总分为: 金钱:" + currentPlayer.money + " 分数:" + currentPlayer.score);
-
+            Debug.Log("玩家" + currentPlayer.name + "总分为: 金钱:" + currentPlayer.PD.money + " 分数:" + currentPlayer.PD.score);
             //执行特殊函数
             for (int i = 0; i < cardData.specialFunctions.Length; i++)
             {
+                Debug.Log("this is " + i);
+                Debug.Log("mode is " + cardData.specialFunctions[i].functionMode);
                 isFunctionEnd = false;
                 FunctionManager.FunctionDelegate function = functionManager.GetFunction(cardData.specialFunctions[i].functionMode);
                 PlayerBehaviour player = GetPlayer(cardData.specialFunctions[i].self);
@@ -282,8 +306,7 @@ public class GameController : MonoBehaviour
                 }
             }
 
-            //换牌
-            CardData nCardData = null;
+            /////////////////////为player换牌/////////////////////
             cardFactory.Return(cardData);
             //当if不存在, 只看else
             if (replaceWithSelectCard && mSelectedCard.Count > 0)
@@ -296,9 +319,10 @@ public class GameController : MonoBehaviour
             {
                 nCardData = cardFactory.Get();
             }
-            Debug.Log("放回旧牌: " + cardData.name + " 得到新牌: " + nCardData.name);
+            Debug.Log("放回旧牌: " + cardData.name + cardData.id + " 得到新牌: " + nCardData.name + nCardData.id);
             isSkillEnd = false;
             card.CurCardData = nCardData;
+            Debug.Log(card.name + "上的牌是: " + nCardData.name + nCardData.id);
             currentPlayer.UseCardSkill(cardData, nCardData);
             //等待玩家换牌完毕
             while (!isSkillEnd)
@@ -306,27 +330,67 @@ public class GameController : MonoBehaviour
                 yield return new WaitForEndOfFrame();
             }
         }
+        else
+        {
+            currentPlayer.UseCardSkill(null, null);
+        }
         state = States.mapFunc;
+
+        isBusy = false;
+        //GameController和IA的繁忙状态必须同步
+        act.SetBusy(isBusy);
+
+        StartCoroutine(ExeStationEvent());
+    }
+
+    private IEnumerator ExeStationEvent()
+    {
+        //进入繁忙状态, 将不再监听卡牌
+        isBusy = true;
+        //GameController和IA的繁忙状态必须同步
+        act.SetBusy(isBusy);
 
         //////////////////////////地形效果阶段////////////////////////////
         //应用地形效果
         Debug.Log("展示给玩家看他将要受到的地图效果, 并等待确认");
         isMapEffectEnd = false;
-        var eventData = eventController.getEvent(gameMap.getStation(currentPlayer.mapPosition));
-        eventBoard.ShowBoard(eventData);
-        //等待玩家确认地形效果
-        while (!isMapEffectEnd)
+        var mapStation = gameMap.getStation(currentPlayer.mapPosition);
+
+        //要炒股了
+        if (mapStation.stationData.name == "stock")
         {
-            yield return new WaitForEndOfFrame();
+            ticketUI.setPB(currentPlayer);
+            ticketUI.UpdateStock();
+            //ticketUIObj.transform.position = ticketUIPos;
+            ticketCamera.SetActive(true);
+            isStockEnd = false;
+            while (!isStockEnd)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+            //ticketUIObj.transform.position = unSeePos;
+            ticketCamera.SetActive(false);
         }
-        //将地形效果应用到自玩家身上
+
+        //这个地点的相关事件没有定义的话, 就不处罚地点事件
+        var eventData = eventController.getEvent(mapStation);
         if (eventData != null)
         {
-            var dataRef = eventData.eventData;
-            currentPlayer.money += dataRef.money;
-            currentPlayer.score += dataRef.point;
-            Debug.Log("玩家" + currentPlayer.name +"受到地形效果: 金钱:" + dataRef.money + " 分数:" + dataRef.point);
-            Debug.Log("玩家" + currentPlayer.name + "总分为: 金钱:" + currentPlayer.money + " 分数:" + currentPlayer.score + " 回合跳过:" + currentPlayer.skipsTimes);
+            eventBoard.ShowBoard(eventData);
+            //等待玩家确认地形效果
+            while (!isMapEffectEnd)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+            //将地形效果应用到自玩家身上
+            if (eventData != null)
+            {
+                var dataRef = eventData.eventData;
+                currentPlayer.PD.money += dataRef.money;
+                currentPlayer.PD.score += dataRef.point;
+                Debug.Log("玩家" + currentPlayer.name + "受到地形效果: 金钱:" + dataRef.money + " 分数:" + dataRef.point);
+                Debug.Log("玩家" + currentPlayer.name + "总分为: 金钱:" + currentPlayer.PD.money + " 分数:" + currentPlayer.PD.score + " 回合跳过:" + currentPlayer.skipsTimes);
+            }
         }
 
         state = States.move;
@@ -337,7 +401,6 @@ public class GameController : MonoBehaviour
         //下一回合
         NextRound();
     }
-
     /// <summary>
     /// imformation - 选择界面的基本数据集
     /// cardlist - （无视）
@@ -352,9 +415,9 @@ public class GameController : MonoBehaviour
         isWaitIA = true;
         if (imformation.selectPlayer)
         {
+            selectPlayerNum = imformation.playerNum;
             if (players.Length > 2)
             {
-                selectPlayerNum = imformation.playerNum;
                 //exhibit players  
 
                 while (isWaitIA)
@@ -444,6 +507,14 @@ public class GameController : MonoBehaviour
         isMapEffectEnd = true;
     }
 
+    //炒股结束后
+    public void OnStockOver()
+    {
+        //更新显示玩家金钱等讯息
+        SendPlayerMessageToUI();
+        isStockEnd = true;
+    }
+
     //更新玩家的讯息到UI
     public void SendPlayerMessageToUI()
     {
@@ -459,34 +530,44 @@ public class GameController : MonoBehaviour
             mSelectedCard.Add(card.CurCardData);
             return true;
         }
+        Debug.Log("超过数量限制");
         return false;
     }
-    
+
+    public void UnSelectCard(Card card)
+    {
+        mSelectedCard.Remove(card.CurCardData);
+        return;
+    }
 
 
     // Update is called once per frame
     void Update()
     {
     }
-    
+
     public bool EndSelect()
     {
         bool ans = true;
         if (selectCardNum >= 0)
         {
-            ans = selectCardNum == mSelectedCard.Count;
+            ans = (selectCardNum == mSelectedCard.Count);
+            Debug.Log(mSelectedCard.Count.ToString() + ans);
         }
         else
         {
-            ans = Mathf.Abs(selectCardNum) >= mSelectedCard.Count;
+            ans = (Mathf.Abs(selectCardNum) >= mSelectedCard.Count);
+            Debug.Log(mSelectedCard.Count.ToString() + ans);
         }
-        if (selectPlayerNum > 0)
+        if (selectPlayerNum >= 0)
         {
-            ans = selectPlayerNum == mBeSelectedPlayer.Count;
+            ans = (selectPlayerNum == mBeSelectedPlayer.Count);
+            Debug.Log(selectPlayerNum.ToString() + mBeSelectedPlayer.Count.ToString() + ans);
         }
         else
         {
-            ans = Mathf.Abs(selectPlayerNum) >= mBeSelectedPlayer.Count;
+            ans = (Mathf.Abs(selectPlayerNum) >= mBeSelectedPlayer.Count);
+            Debug.Log(selectPlayerNum.ToString() + mBeSelectedPlayer.Count.ToString() + ans);
         }
         if (ans)
         {
@@ -498,19 +579,19 @@ public class GameController : MonoBehaviour
     private void MoneyFunction(PlayerBehaviour player, int[] parameterList)
     {
         //List<int> parameterList = FunctionManager.GetParamaters(parameters);
-        player.money += parameterList[0];
+        player.PD.money += parameterList[0];
         isFunctionEnd = true;
         Debug.Log("玩家" + player.name + "金钱变化: " + parameterList[0]);
-        Debug.Log("玩家" + player.name + "总金钱: " + player.money);
+        Debug.Log("玩家" + player.name + "总金钱: " + player.PD.money);
     }
 
     private void SourceFunction(PlayerBehaviour player, int[] parameterList)
     {
         //List<int> parameterList = FunctionManager.GetParamaters(parameters);
-        player.score += parameterList[0];
+        player.PD.score += parameterList[0];
         isFunctionEnd = true;
         Debug.Log("玩家" + player.name + "分数变化: " + parameterList[0]);
-        Debug.Log("玩家" + player.name + "总分数: " + player.score);
+        Debug.Log("玩家" + player.name + "总分数: " + player.PD.score);
     }
 
     private void RoundFunction(PlayerBehaviour player, int[] parameterList)
@@ -527,12 +608,44 @@ public class GameController : MonoBehaviour
         //List<int> parameterList = FunctionManager.GetParamaters(parameters);
         player.ObatinTargetPositon(gameMap.getStation(parameterList[0]).transform.position);
     }
-    
+
     private void StealFunction(PlayerBehaviour player, int[] parameterList)
     {
         //List<int> parameterList = FunctionManager.GetParamaters(parameters);
-        
+
         StartCoroutine(WaitPlayerSelect(new SelectImformation(true, true, 1, 1, BeStoleCard)));
+    }
+
+    private void ReplaceFunction(PlayerBehaviour player, int[] parameterList)
+    {
+        //debug
+        var before = player.GetAllCard();
+        foreach (var card in before)
+        {
+            Debug.Log("before: " + card.name + card.id);
+        }
+
+        //得到人物身上的卡牌列表
+        var playerCardList = player.GetAllCard();
+        for (int i = 0; i < playerCardList.Count; i++)
+        {
+            //替换掉所有非使用中的牌
+            if (playerCardList[i].id != parameterList[0])
+            {
+                playerCardList[i] = cardFactory.Replace(playerCardList[i]);
+            }
+        }
+
+        //刷新显示
+        act.ShowCardDiff(currentPlayer.GetAllCard());
+        isFunctionEnd = true;
+
+        //debug
+        var after = player.GetAllCard();
+        foreach (var card in before)
+        {
+            Debug.Log("after: " + card.name + card.id);
+        }
     }
 
     private void BeStoleCard()

@@ -3,52 +3,47 @@
   "dataList": [
     {
       "stationNo": "0",
-      "name": "road",
+      "name": "stock",
       "majorStation": "true"
     },
     {
       "stationNo": "1",
-      "name": "washing room",
-      "majorStation": "false"
+      "name": "stock",
+      "majorStation": "true"
     },
     {
       "stationNo": "2",
-      "name": "washing room",
-      "majorStation": "false"
+      "name": "stock",
+      "majorStation": "true"
     },
     {
       "stationNo": "3",
-      "name": "prison house",
-      "majorStation": "false"
+      "name": "stock",
+      "majorStation": "true"
     },
     {
       "stationNo": "4",
-      "name": "prison house",
-      "majorStation": "false"
+      "name": "stock",
+      "majorStation": "true"
     },
     {
       "stationNo": "5",
-      "name": "visiting room",
-      "majorStation": "false"
-    },
-    {
-      "stationNo": "6",
-      "name": "visiting room",
-      "majorStation": "false"
+      "name": "stock",
+      "majorStation": "true"
     },
     {
       "stationNo": "7",
-      "name": "clinic",
+      "name": "stock",
       "majorStation": "true"
     },
     {
       "stationNo": "8",
-      "name": "police house",
+      "name": "stock",
       "majorStation": "true"
     },
     {
       "stationNo": "9",
-      "name": "canteen",
+      "name": "stock",
       "majorStation": "true"
     }
   ]

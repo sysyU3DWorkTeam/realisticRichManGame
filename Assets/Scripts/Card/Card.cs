@@ -19,7 +19,7 @@ public class Card : MonoBehaviour{
     private BoxCollider boxCollider;
     private Material material;
     private CardData mCurCardData;
-
+   
     public State state = State.NORMAL;
 
     public CardData CurCardData
@@ -78,7 +78,7 @@ public class Card : MonoBehaviour{
         //state = State.USE;
         //boxCollider.enabled = false;
         
-        if (state == State.NORMAL)
+        if (state == State.NORMAL || state == State.SELECT)
         {
             state = State.USE;
             //Debug.Log("翻了个牌");
@@ -116,16 +116,27 @@ public class Card : MonoBehaviour{
         StartCoroutine("WaitNewData");
     }
 
+    public void SetCardTexture(CardData cardData)
+    {
+        if (state == State.NORMAL)
+        {
+            mCurCardData = cardData;
+            Texture t = Resources.Load(CurCardData.name) as Texture;
+            material.SetTexture("_MainTex", t);
+        }
+    }
     /// <summary>
     /// 选择卡片调用
     /// </summary>
     public void SelectCard()
     {
+        state = State.SELECT;
         animator.SetBool("Select", true);
     }
 
     public void UnSelectCard()
     {
+        state = State.NORMAL;
         animator.SetBool("Select", false);
     }
 }

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InterActive : MonoBehaviour {
+public class InterActive : MonoBehaviour
+{
 
     enum State
     {
@@ -18,7 +19,9 @@ public class InterActive : MonoBehaviour {
     private Card[] cards = new Card[6];
     //结束该阶段的按钮
     public GameObject endButton;
+    public GameObject selectCardBoardPrefab;
 
+    private GameObject selectCardBoard;
     bool isBusy = false;
 
     GameController gameController;
@@ -27,7 +30,8 @@ public class InterActive : MonoBehaviour {
     /// </summary>
     private GameObject selectObject = null;
 
-    void Awake () {
+    void Awake()
+    {
         gameController = this.GetComponent<GameController>();
         for (int i = 0; i < cardsInterface.Length; i++)
         {
@@ -36,9 +40,10 @@ public class InterActive : MonoBehaviour {
         state = State.ZERO;
     }
 
-	void Start() {
-		SP = GameObject.Find ("SceneDirector").GetComponent<Sound_Play>();
-	}
+    void Start()
+    {
+        SP = GameObject.Find("SceneDirector").GetComponent<Sound_Play>();
+    }
     void Update()
     {
         MouseClick();
@@ -73,11 +78,6 @@ public class InterActive : MonoBehaviour {
         //检测鼠标松开到哪个卡，如果与按下gameobject相同，则执行点击事件
         if (Input.GetMouseButtonUp(0))
         {
-            if (isBusy)
-            {
-                Debug.Log("正忙, 前端不接受点击");
-                return;
-            }
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
@@ -97,6 +97,8 @@ public class InterActive : MonoBehaviour {
     {
         if (gameController.EndSelect())
         {
+            Debug.Log("选择成功，关闭选择界面");
+            Destroy(selectCardBoard);
             //关闭显示
             state = State.ZERO;
         }
@@ -104,7 +106,7 @@ public class InterActive : MonoBehaviour {
 
     private void StimulateObj(GameObject obj)
     {
-        switch(state)
+        switch (state)
         {
             case State.ZERO:
                 {
@@ -116,7 +118,7 @@ public class InterActive : MonoBehaviour {
                         gameController.UseThisCard(obj.GetComponent<Card>());
                     }
                     //如果点击的是结束按钮, 传入null, GC那边对null有特殊处理
-                    else if (obj == endButton)
+                    if (obj.transform.tag == "EndButton")
                     {
                         if (SP != null) SP.SoundPlay(0);
                         gameController.UseThisCard(null);
@@ -129,10 +131,24 @@ public class InterActive : MonoBehaviour {
                     {
                         if (SP != null) SP.SoundPlay(0);
                         Card card = obj.GetComponent<Card>();
-                        if (gameController.SelectCard(card))
+                        if (card.state == Card.State.SELECT)
                         {
-                            card.SelectCard();
+                            card.UnSelectCard();
+                            gameController.UnSelectCard(card);
                         }
+                        else if (card.state == Card.State.NORMAL)
+                        {
+                            if (gameController.SelectCard(card))
+                            {
+                                card.SelectCard();
+                            }
+                        }
+                    }
+                    if (obj.transform.tag == "EndButton")
+                    {
+                        Debug.Log("EndButton click, 选择结束");
+                        if (SP != null) SP.SoundPlay(0);
+                        EndSelect();
                     }
                     break;
                 }
@@ -147,16 +163,26 @@ public class InterActive : MonoBehaviour {
             cards[i].Shuffle(allCards[i]);
         }
     }
+
+    //从控制器得到卡片列表并刷新卡片显示
+    public void ShowCardDiff(List<CardData> allCards)
+    {
+        for (int i = 0; i < allCards.Count && i < cardsInterface.Length; i++)
+        {
+            if (allCards[i].id != cards[i].CurCardData.id)
+                cards[i].Shuffle(allCards[i]);
+        }
+    }
+
     /// <summary>
     /// 显示卡片，根据cardlist创建card并显示
     /// </summary>
     /// <param name="cardList"></param>
     public void ExhibitCard(List<CardData> cardList)
     {
-        for (int i = 0; i < cardList.Count; i++)
-        {
-            
-        }
+        selectCardBoard = Instantiate(selectCardBoardPrefab);
+        selectCardBoard.GetComponent<SelectCardBoardBH>().CreateSelectCardBoard(cardList);
+
         state = State.ONE;
     }
 }
@@ -179,7 +205,7 @@ public class InterActive : MonoBehaviour {
 //    {
 //        this.inter = inter;
 //    }
-    
+
 //    //鼠标点下时会呼叫老大, 报告自己被点了
 //    void OnMouseDown()
 //    {
